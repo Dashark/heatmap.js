@@ -40,7 +40,7 @@
           cols:$(data).find('cols').text(),
           data:$(data).find('data').text().split(/\D+/),
         }
-      });
+        });
 
       window.onload = function() {
         // helper function
@@ -96,9 +96,9 @@
           //radius: 10,
           blur: .75,
           // update the legend whenever there's an extrema change
-          onExtremaChange: function onExtremaChange(data) {
-            updateLegend(data);
-          }
+          //onExtremaChange: function onExtremaChange(data) {
+            //updateLegend(data);
+          //}
         });
 
         // boundaries for data generation
@@ -171,15 +171,15 @@
         }
         var rect = new Rectangle();
         $(document).click(function(e) {
-          alert(e.pageX + " and " + e.pageY);
           if(rect.lptx === 0 && rect.lpty === 0) {
             rect.lptx = e.pageX;
             rect.lpty = e.pageY;
           } else if(rect.rptx === 0 && rect.rpty === 0) {
             rect.rptx = e.pageX;
             rect.rpty = e.pageY;
-          } else {
+
             rect.layout();
+            console.log(rect);
             rects.push(rect);
             rect = new Rectangle();
           }
