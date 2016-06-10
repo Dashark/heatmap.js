@@ -41,6 +41,34 @@
           data:$(data).find('data').text().split(/\D+/),
         }
         });
+        function Rectangle() {
+          this.lptx = 0;
+          this.lpty = 0;
+          this.rptx = 0;
+          this.rpty = 0;
+          this.ptIn = function(x,y){
+            if(x > this.lptx && y > this.lpty 
+                && x < this.rptx && y < this.rpty)
+              return true;
+            return false;
+          }
+          this.layout = function() {
+            if(this.lptx > this.rptx) {
+              var t = this.lptx;
+              this.lptx = this.rptx;
+              this.rptx = t;
+            }
+            if(this.lpty > this.rpty) {
+              var t = this.lpty;
+              this.lpty = this.rpty;
+              this.rpty = t;
+            }
+          }
+        }
+        var rects = [];
+        var rect = new Rectangle();
+          var t = [];
+          var pts = [];
 
       window.onload = function() {
         // helper function
@@ -71,8 +99,8 @@
         function updateLegend(data) {
           // the onExtremaChange callback gives us min, max, and the gradientConfig
           // so we can update the legend
-          $('min').innerHTML = data.min;
-          $('max').innerHTML = data.max;
+          $('#min').innerHTML = data.min;
+          $('#max').innerHTML = data.max;
           // regenerate gradient image
           if (data.gradient != gradientCfg) {
             gradientCfg = data.gradient;
@@ -83,7 +111,7 @@
 
             legendCtx.fillStyle = gradient;
             legendCtx.fillRect(0, 0, 100, 10);
-            $('gradient').src = legendCanvas.toDataURL();
+            $('#gradient').src = legendCanvas.toDataURL();
           }
         };
         /* legend code end */
@@ -96,9 +124,9 @@
           //radius: 10,
           blur: .75,
           // update the legend whenever there's an extrema change
-          //onExtremaChange: function onExtremaChange(data) {
-            //updateLegend(data);
-          //}
+          onExtremaChange: function onExtremaChange(data) {
+            updateLegend(data);
+          }
         });
 
         // boundaries for data generation
@@ -111,23 +139,17 @@
           // randomly generate extremas
           var max = 100;
           var min = 0;
-          var t = [];
-          var pts = [];
 
           for (var i = 0; i < heats.rows; i++) {
             for(var j=0;j<heats.cols; j++) {
               var x = j * width;
               var y = i* height;
-              var c = heats.data[i*heats.cols+j] + min;
+              var c = parseFloat(heats.data[i*heats.cols+j]) + min;
               // btw, we can set a radius on a point basis
-              var r = width/2.0;
+              var r = width;
               // add to dataset
               t.push({ x: x, y:y, value: c, radius: r });
               
-              for(rect in rects) {
-                if(rect.ptIn(x, y))
-                  pts.push({x:x, y:y, value:c, radius:r});
-              }
             }
           }
           var init = +new Date;
@@ -139,37 +161,24 @@
           });
           console.log('took ', (+new Date) - init, 'ms');
         };
+        var regenerate = function() {
+          pts = [];
+          for(var i=0;i<t.length;i+=1) {
+            for(var j=0;j<rects.length;j+=1) {
+              if(rects[j].ptIn(t[i].x, t[i].y))
+                pts.push({x:t[i].x, y:t[i].y, value:t[i].value, radius:t[i].radius});
+            }
+          }
+          pts.sort(function(a,b) {
+            return b.value - a.value;
+          });
+          console.log(pts[0]);
+        }
         // initial generate
         generate();
 
         // whenever a user clicks on the ContainerWrapper the data will be regenerated -> new max & min
         //document.getElementById('heatmapContainerWrapper').onclick = function() { generate(); };
-        var rects = [];
-        function Rectangle() {
-          this.lptx = 0;
-          this.lpty = 0;
-          this.rptx = 0;
-          this.rpty = 0;
-          this.ptIn = function(x,y){
-            if(x > this.lptx && y > this.lpty 
-                && x < this.rptx && y < this.rpty)
-              return true;
-            return false;
-          }
-          this.layout = function() {
-            if(this.lptx > this.rptx) {
-              var t = this.lptx;
-              this.lptx = this.rptx;
-              this.rptx = t;
-            }
-            if(this.lpty > this.rpty) {
-              var t = this.lpty;
-              this.lpty = this.rpty;
-              this.rpty = t;
-            }
-          }
-        }
-        var rect = new Rectangle();
         $(document).click(function(e) {
           if(rect.lptx === 0 && rect.lpty === 0) {
             rect.lptx = e.pageX;
@@ -181,6 +190,7 @@
             rect.layout();
             console.log(rect);
             rects.push(rect);
+            regenerate();
             rect = new Rectangle();
           }
         });
