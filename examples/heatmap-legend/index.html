@@ -182,6 +182,8 @@
           });
           var maxval = pts[0].value;
           if(maxval <= 0) {
+            alert("data error, draw another rectangle");
+            rects = [];
           }
           for(var i=0; i<pts.length; i+=1) {
             pts[i].value = (pts[i].value/maxval)*100;
