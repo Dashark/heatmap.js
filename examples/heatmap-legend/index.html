@@ -15,7 +15,7 @@
       h1 { position:absolute; background:black; color:white; padding:10px; font-weight:200;}
     </style>
     <script src="./jquery-2.2.3.min.js"></script>
-    <script src="./heatmap.min.js"></script>
+    <script src="./heatmap.js"></script>
     <script>
     </script>
     
@@ -34,7 +34,7 @@
     </div>
     <script>
         var heats=null;
-        $.post("c2.xml", function(data) {
+        $.post("c4.xml", function(data) {
         heats={
           rows:$(data).find('rows').text(),
           cols:$(data).find('cols').text(),
@@ -155,6 +155,7 @@
               
             }
           }
+          heats=null;
           //var pts = t.slice(5000,10000);
           //pts = pts.concat(t.slice(30000,35000));
           var init = +new Date;
@@ -180,6 +181,8 @@
             return b.value - a.value;
           });
           var maxval = pts[0].value;
+          if(maxval <= 0) {
+          }
           for(var i=0; i<pts.length; i+=1) {
             pts[i].value = (pts[i].value/maxval)*100;
           }
