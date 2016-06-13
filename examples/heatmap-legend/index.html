@@ -42,6 +42,7 @@
         }
         });
         function Rectangle() {
+          this.sum = 0;
           this.lptx = 0;
           this.lpty = 0;
           this.rptx = 0;
@@ -63,6 +64,9 @@
               this.lpty = this.rpty;
               this.rpty = t;
             }
+          }
+          this.toString= function() {
+            return this.sum + ",["+this.lptx+","+this.lpty+"],"+"["+this.rptx+","+this.rpty+"]\n";
           }
         }
         var rects = [];
@@ -171,8 +175,10 @@
           var pts = [];
           for(var i=0;i<t.length;i+=1) {
             for(var j=0;j<rects.length;j+=1) {
-              if(rects[j].ptIn(t[i].x, t[i].y))
+              if(rects[j].ptIn(t[i].x, t[i].y)) {
                 pts.push({x:t[i].x, y:t[i].y, value:t[i].value, radius:t[i].radius});
+                rects[j].sum += t[i].value;
+              }
             }
           }
           //pts = t.slice(10000, 20000);
@@ -193,6 +199,11 @@
             max:100,
             data:pts
           });
+          var output="";
+          for(var i=0;i<rects.length;i++) {
+            output += rects[i].toString();
+          }
+          alert(output);
         };
         // initial generate
         generate();
