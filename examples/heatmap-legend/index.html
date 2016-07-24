@@ -35,7 +35,7 @@
     <script>
         $.ajaxSetup({async:false});
         var heats=null;
-        $.post("c4.xml", function(data) {
+        $.post("output.xml", function(data) {
         heats={
           rows:$(data).find('rows').text(),
           cols:$(data).find('cols').text(),
@@ -152,7 +152,7 @@
             for(var j=0;j<heats.cols; j++) {
               var x = j * width;
               var y = i* height;
-              var c = parseFloat(heats.data[i*heats.cols+j]) + min;
+              var c = parseFloat(heats.data[i*heats.cols+j])*100/3600 + min;
               // btw, we can set a radius on a point basis
               var r = width;
               // add to dataset
