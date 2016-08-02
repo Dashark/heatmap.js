@@ -42,13 +42,15 @@
           "两半球热点\\captrue1_20160712.xml"
         ];
         var heats=[];
-        $.post("两半球热点\\captrue1_20160709.xml", function(data) {
-        heat={
-          rows:$(data).find('rows').text(),
-          cols:$(data).find('cols').text(),
-          data:$(data).find('data').text().split(/\D+/),
-        }
-        heats.push(heat);
+        $.each(files, function(i, file){
+          $.post(file, function(data) {
+            heat={
+              rows:$(data).find('rows').text(),
+              cols:$(data).find('cols').text(),
+              data:$(data).find('data').text().split(/\D+/),
+            }
+            heats.push(heat);
+          });
         });
         function Rectangle() {
           this.sum = 0;
