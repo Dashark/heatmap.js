@@ -41,7 +41,7 @@
           "两半球热点\\captrue1_20160711.xml",
           "两半球热点\\captrue1_20160712.xml"
         ];
-        var heats=[];
+        var heats=[],heatIndex=0;
         $.each(files, function(i, file){
           $.post(file, function(data) {
             heat={
@@ -152,8 +152,8 @@
         });
 
         // boundaries for data generation
-        var width = (+window.getComputedStyle(document.body).width.replace(/px/,''))/heats[0].cols;
-        var height = (+window.getComputedStyle(document.body).height.replace(/px/,''))/heats[0].rows;
+        var width = (+window.getComputedStyle(document.body).width.replace(/px/,''))/heats[heatIndex].cols;
+        var height = (+window.getComputedStyle(document.body).height.replace(/px/,''))/heats[heatIndex].rows;
         //alert(width);
         //alert(height);
         // generate 1000 datapoints
@@ -162,12 +162,12 @@
           // randomly generate extremas
           var max = 100; //Legend 要取所有数据中的最大值作为范围
           var min = 0;
-alert(Math.max.apply(null,heats[0].data)); //6574  6043 9948
-          for (var i = 0; i < heats[0].rows; i++) {
-            for(var j=0;j<heats[0].cols; j++) {
+//alert(Math.max.apply(null,heats[0].data)); //6574  6043 9948
+          for (var i = 0; i < heats[heatIndex].rows; i++) {
+            for(var j=0;j<heats[heatIndex].cols; j++) {
               var x = j * width;
               var y = i* height;
-              var c = parseFloat(heats[0].data[i*heats[0].cols+j])*100/maxValue + min;
+              var c = parseFloat(heats[heatIndex].data[i*heats[heatIndex].cols+j])*100/maxValue + min;
               // btw, we can set a radius on a point basis
               var r = width;
               // add to dataset
