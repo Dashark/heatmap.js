@@ -167,7 +167,7 @@ alert(Math.max.apply(null,heats[0].data)); //6574  6043 9948
             for(var j=0;j<heats[0].cols; j++) {
               var x = j * width;
               var y = i* height;
-              var c = parseFloat(heats[0].data[i*heats[0].cols+j])*100/134071 + min;
+              var c = parseFloat(heats[0].data[i*heats[0].cols+j])*100/maxValue + min;
               // btw, we can set a radius on a point basis
               var r = width;
               // add to dataset
