@@ -226,6 +226,7 @@ alert(Math.max.apply(null,heats[0].data)); //6574  6043 9948
 
         // whenever a user clicks on the ContainerWrapper the data will be regenerated -> new max & min
         document.getElementById('heatmapContainerWrapper').onclick = function(e) { 
+        alert("click");
           if(rect.lptx === 0 && rect.lpty === 0) {
             rect.lptx = e.pageX;
             rect.lpty = e.pageY;
@@ -239,6 +240,9 @@ alert(Math.max.apply(null,heats[0].data)); //6574  6043 9948
             regenerate();
             rect = new Rectangle();
           }
+        };
+        document.getElementById('heatmapContainerWrapper').ondblclick = function(e) {
+          alert("double click");
         };
       };
     </script>
