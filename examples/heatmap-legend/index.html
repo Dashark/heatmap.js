@@ -52,6 +52,11 @@
             heats.push(heat);
           });
         });
+        var maxValue=0,maxValues=[];
+        $.each(heats, function(i, heat){
+          maxValues.push(Math.max.apply(null,heat.data));
+        });
+        maxValue=Math.max.apply(null,maxValues);
         function Rectangle() {
           this.sum = 0;
           this.lptx = 0;
