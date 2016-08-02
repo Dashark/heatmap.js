@@ -34,13 +34,21 @@
     </div>
     <script>
         $.ajaxSetup({async:false});
-        var heats=null;
-        $.post("output.xml", function(data) {
-        heats={
+        var files=[
+          "两半球热点\\captrue1_20160708.xml",
+          "两半球热点\\captrue1_20160709.xml",
+          "两半球热点\\captrue1_20160710.xml",
+          "两半球热点\\captrue1_20160711.xml",
+          "两半球热点\\captrue1_20160712.xml"
+        ];
+        var heats=[];
+        $.post("两半球热点\\captrue1_20160709.xml", function(data) {
+        heat={
           rows:$(data).find('rows').text(),
           cols:$(data).find('cols').text(),
           data:$(data).find('data').text().split(/\D+/),
         }
+        heats.push(heat);
         });
         function Rectangle() {
           this.sum = 0;
@@ -137,8 +145,8 @@
         });
 
         // boundaries for data generation
-        var width = (+window.getComputedStyle(document.body).width.replace(/px/,''))/heats.cols;
-        var height = (+window.getComputedStyle(document.body).height.replace(/px/,''))/heats.rows;
+        var width = (+window.getComputedStyle(document.body).width.replace(/px/,''))/heats[0].cols;
+        var height = (+window.getComputedStyle(document.body).height.replace(/px/,''))/heats[0].rows;
         //alert(width);
         //alert(height);
         // generate 1000 datapoints
@@ -147,12 +155,12 @@
           // randomly generate extremas
           var max = 100; //Legend 要取所有数据中的最大值作为范围
           var min = 0;
-
-          for (var i = 0; i < heats.rows; i++) {
-            for(var j=0;j<heats.cols; j++) {
+alert(Math.max.apply(null,heats[0].data)); //6574  6043 9948
+          for (var i = 0; i < heats[0].rows; i++) {
+            for(var j=0;j<heats[0].cols; j++) {
               var x = j * width;
               var y = i* height;
-              var c = parseFloat(heats.data[i*heats.cols+j])*100/3600 + min;
+              var c = parseFloat(heats[0].data[i*heats[0].cols+j])*100/134071 + min;
               // btw, we can set a radius on a point basis
               var r = width;
               // add to dataset
@@ -160,7 +168,7 @@
               
             }
           }
-          heats=null;
+          heats=[];
           //var pts = t.slice(5000,10000);
           //pts = pts.concat(t.slice(30000,35000));
           var init = +new Date;
