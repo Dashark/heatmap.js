@@ -175,7 +175,7 @@
               
             }
           }
-          heats=[];
+          //heats=[];
           //var pts = t.slice(5000,10000);
           //pts = pts.concat(t.slice(30000,35000));
           var init = +new Date;
@@ -226,7 +226,7 @@
 
         // whenever a user clicks on the ContainerWrapper the data will be regenerated -> new max & min
         document.getElementById('heatmapContainerWrapper').onclick = function(e) { 
-        alert("click");
+        //alert("click");
           if(rect.lptx === 0 && rect.lpty === 0) {
             rect.lptx = e.pageX;
             rect.lpty = e.pageY;
@@ -242,7 +242,10 @@
           }
         };
         document.getElementById('heatmapContainerWrapper').ondblclick = function(e) {
-          alert("double click");
+          //alert("double click");
+          heatIndex+=1;
+          heatIndex = heatIndex%heats.length;
+          generate();
         };
       };
     </script>
