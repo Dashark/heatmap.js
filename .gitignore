@@ -5,3 +5,4 @@ support
 dist
 *.zip
 examples/heatmap-legend/heatmap.js
+*.xml
