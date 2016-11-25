@@ -1,7 +1,6 @@
-import glob,sys,time,json,urllib.request
+# -*- coding: utf-8 -*
+import glob,sys,time,json,urllib.request,shutil
 import xml.etree.ElementTree as ET
-#print(sys.path[0])
-#print(glob.glob('C:\\Users\\huzong\\Documents\\GitHub\\heatmap.js\\examples\\result\\*.xml'))
 xmls = [ET.parse(file) for file in glob.glob('result\\*.xml')]
 roots = [xml.getroot() for xml in xmls]
 cameras = []
@@ -18,11 +17,14 @@ for root in roots :
   camera.append(users)
   camera.append(ctime)
   cameras.append(camera)
-print(cameras)
 url = "https://swifi.cnzz.com/camlog"
 body = 'data='+json.dumps(cameras)
-print(body)
 bytes = body.encode('utf-8')
-print(bytes)
 res = urllib.request.urlopen(url, bytes)
-print(res.read())
+ret = json.loads(res.read().decode('utf-8'))
+if(ret['ret'] == 0) and (ret['msg'] == 'OK'):
+  for file in glob.glob('result/*.xml'):
+    shutil.move(file, 'result/archived')
+else:
+  print("upload failed. didn't move files")
+ 
